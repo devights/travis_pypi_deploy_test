@@ -1,0 +1,17 @@
+sudo: false
+language: python
+python:
+  - "2.7.6"
+install:
+  - python setup.py -q install
+before_script:
+  - pip install coverage
+  - pip install python-coveralls
+  - pip install pep8
+  - cp travis-ci/manage.py manage.py
+  - python manage.py migrate --noinput
+script:
+  - pep8 test_app/ --exclude=migrations,test_app/test
+  - coverage run --source=test_app/ --omit=test_app/migrations/* manage.py test test_app
+after_script:
+  - coveralls
