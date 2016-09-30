@@ -1,0 +1,24 @@
+sudo: false
+language: python
+python:
+  - "2.7.6"
+install:
+  - pip install .
+before_script:
+  - pip install coverage
+  - pip install python-coveralls
+  - pip install pep8
+  - cp travis-ci/manage.py manage.py
+  - python manage.py migrate --noinput
+script:
+  - pep8 test_app/ --exclude=migrations,test_app/test
+  - coverage run --source=test_app/ --omit=test_app/migrations/* manage.py test test_app
+after_script:
+  - coveralls
+deploy:
+  provider: pypi
+  user: "devights"
+  password:
+    secure: Cx0zY6ePNKlmvLnlhTm8xbN/fWiyqRIuBaMhOrHWlwrNEz7g3HFZz8OoMp0x0aC7/wDzy9MLkbo6l0/pDJXpwaBC6ZhfYBmGoUCCDuEKqftDlWlGEhGtHpG5WJ2OjM1fe14caHxZic9SYJsxZRZzdhtRWcQCVyMlORAS0hz6iRnHTI08ofWF8eQ5sRkp6emOTPtTJPAgbyAwTYiggSFHbXoF3Z2DpynvgA2nPFJXUMhbpu+CL6YY2W4Mue+VXhyWBb3hvxdxPt6Q86QXtOrRubl4O7OqT6RY5CqRBZ2rx4/roqIEeP0DUOJeGL76sjYlZsHyoxQkj7o6dq/81G4Oo06yx7QwTQOq3gow574zr6XA50NABG2NwAHW0vY5K7HFRfQmLRWxMTxQujFWnMkIuLKNbGFZYydidGx298Pv7heI748qLTgsJE1TNrIVUL3de3FM6JP919zYZ/h6AbbQVD81w71iyHshcY0G3Qx1HByRFobVSonLkgv4+IdbVBWsjqGYIBEVSCV3rdhlOhhJigmfswb3qHIkXMhXgVO2CnRGdWNVLzBP8TK60Ilyia4Hw2h7ukqGuhQWK6v7ZGbtBsDN/nv88uGAxoRgr3e/y8B4KwDd5T8cCU5L15+jq6Hi1cqY45072yHRYTC9rJgUumnghpbDymFpRNmC+9LeDQc=
+  on:
+    branch: master
