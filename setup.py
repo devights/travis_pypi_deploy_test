@@ -13,6 +13,7 @@ setup(
     include_package_data=True,
     install_requires=[
         'setuptools',
+        'django'
     ],
     description='Testing auto deplyoment to pypi via travis CI',
     long_description=README,
